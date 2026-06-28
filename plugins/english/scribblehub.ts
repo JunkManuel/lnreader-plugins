@@ -9,7 +9,7 @@ class ScribbleHubPlugin implements Plugin.PluginBase {
   name = 'Scribble Hub';
   icon = 'src/en/scribblehub/icon.png';
   site = 'https://www.scribblehub.com/';
-  version = '1.0.2';
+  version = '1.0.2.fixSearch';
 
   parseNovels(loadedCheerio: CheerioAPI) {
     const novels: Plugin.NovelItem[] = [];
@@ -176,8 +176,11 @@ class ScribbleHubPlugin implements Plugin.PluginBase {
     return chapterText;
   }
 
-  async searchNovels(searchTerm: string): Promise<Plugin.NovelItem[]> {
-    const url = `${this.site}?s=${encodeURIComponent(searchTerm)}&post_type=fictionposts`;
+  async searchNovels(
+    searchTerm: string,
+    pageNo: number,
+  ): Promise<Plugin.NovelItem[]> {
+    const url = `${this.site}series-finder/?sf=1&sh=${encodeURIComponent(searchTerm)}&pg=${pageNo.toString()}`;
     const result = await fetchApi(url);
     const body = await result.text();
 
