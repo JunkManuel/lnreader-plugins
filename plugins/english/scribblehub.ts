@@ -9,7 +9,7 @@ class ScribbleHubPlugin implements Plugin.PluginBase {
   name = 'Scribble Hub';
   icon = 'src/en/scribblehub/icon.png';
   site = 'https://www.scribblehub.com/';
-  version = '1.0.2.fixSearch';
+  version = '1.0.2.fixSearch_addedTags';
 
   parseNovels(loadedCheerio: CheerioAPI) {
     const novels: Plugin.NovelItem[] = [];
@@ -57,6 +57,18 @@ class ScribbleHubPlugin implements Plugin.PluginBase {
       if (filters.genres.value.exclude?.length) {
         params.append('ge', filters.genres.value.exclude.join(','));
       }
+      if (filters.tags.value.include?.length) {
+        params.append('tgi', filters.tags.value.include.join(','));
+      }
+      if (
+        filters.tags.value.include?.length ||
+        filters.tags.value.exclude?.length
+      ) {
+        params.append('mtgi', filters.tag_operator.value);
+      }
+      if (filters.tags.value.exclude?.length) {
+        params.append('tge', filters.tags.value.exclude.join(','));
+      }
       if (filters.content_warning.value.include?.length) {
         params.append('cti', filters.content_warning.value.include.join(','));
       }
@@ -75,7 +87,7 @@ class ScribbleHubPlugin implements Plugin.PluginBase {
       params.append('pg', page.toString());
       url += `series-finder/?sf=1&${params.toString()}`;
     } else {
-      url += `series-finder/?sf=1&sort=ratings&order=desc&pg=${page}`;
+      url += `series-finder/?sf=1&sort=pageviews&order=desc&pg=${page}`;
     }
 
     const body = await fetchApi(url).then(result => result.text());
@@ -191,7 +203,7 @@ class ScribbleHubPlugin implements Plugin.PluginBase {
   filters = {
     sort: {
       label: 'Sort Results By',
-      value: 'ratings',
+      value: 'pageviews',
       options: [
         { label: 'Chapters', value: 'chapters' },
         { label: 'Chapters per Week', value: 'frequency' },
@@ -275,6 +287,31 @@ class ScribbleHubPlugin implements Plugin.PluginBase {
         { label: 'Sports', value: '916' },
         { label: 'Supernatural', value: '5' },
         { label: 'Tragedy', value: '901' },
+      ],
+      type: FilterTypes.ExcludableCheckboxGroup,
+    },
+    tag_operator: {
+      value: 'and',
+      label: 'Tags (And/Or)',
+      options: [
+        { label: 'And', value: 'and' },
+        { label: 'Or', value: 'or' },
+      ],
+      type: FilterTypes.Picker,
+    },
+    tags: {
+      label: 'Tags',
+      value: {
+        include: [],
+        exclude: [],
+      },
+      options: [
+        { label: 'Abandoned Children', value: '119' },
+        { label: 'Ability Steal', value: '120' },
+        { label: 'Absent Parents', value: '121' },
+        { label: 'Abusive Characters', value: '122' },
+        { label: 'Academy', value: '123' },
+        { label: '', value: '' },
       ],
       type: FilterTypes.ExcludableCheckboxGroup,
     },
