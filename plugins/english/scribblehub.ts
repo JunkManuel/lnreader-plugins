@@ -92,6 +92,15 @@ class ScribbleHubPlugin implements Plugin.PluginBase {
       url += `series-finder/?sf=1&sort=pageviews&mnlcd=${lastUpdateMinDate}&order=desc&pg=${page}`;
     }
 
+    if (
+      url ==
+      `${this.site}series-finder/?sf=1&cp=all&sort=pageviews&order=desc&pg=${page}`
+    ) {
+      const date = new Date();
+      const lastUpdateMinDate = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+      url += `&mnlcd=${lastUpdateMinDate}`;
+    }
+
     const body = await fetchApi(url).then(result => result.text());
 
     const loadedCheerio = parseHTML(body);
