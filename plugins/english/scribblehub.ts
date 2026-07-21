@@ -89,7 +89,7 @@ class ScribbleHubPlugin implements Plugin.PluginBase {
     } else {
       const date = new Date();
       const lastUpdateMinDate = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
-      url += `series-finder/?sf=1&sort=pageviews$mnlcd=${lastUpdateMinDate}&order=desc&pg=${page}`;
+      url += `series-finder/?sf=1&sort=pageviews&mnlcd=${lastUpdateMinDate}&order=desc&pg=${page}`;
     }
 
     const body = await fetchApi(url).then(result => result.text());
