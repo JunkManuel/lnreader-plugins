@@ -97,6 +97,7 @@ class ScribbleHubPlugin implements Plugin.PluginBase {
       `${this.site}series-finder/?sf=1&cp=all&sort=pageviews&order=desc&pg=${page}`
     ) {
       const date = new Date();
+      date.setDate(date.getDate() - 1); // change to yesterday
       const lastUpdateMinDate = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
       url += `&mnlcd=${lastUpdateMinDate}`;
     }
